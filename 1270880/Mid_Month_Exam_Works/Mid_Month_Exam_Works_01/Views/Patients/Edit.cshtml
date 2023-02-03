@@ -1,0 +1,83 @@
+﻿@model Mid_Month_Exam_Works_01.Models.Patient
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div id="placeholder"></div>
+    </div>
+    <div class="col-12">
+        <h4>Update Patients</h4>
+        @using (Ajax.BeginForm("Edit", "Patients", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "placeholder", InsertionMode = InsertionMode.Replace, OnSuccess = "OnSuccess" }, new { id = "frm" }))
+        {
+            @Html.HiddenFor(x=> x.PatientId)
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.PatientName, new { @class = "col-form-lable col-2" })
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.PatientName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.PatientName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.Phone, new { @class = "col-form-lable col-2" })
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Phone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.BloodGroup, new { @class = "col-form-lable col-2" })
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.BloodGroup, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.BloodGroup, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.Address, new { @class = "col-form-lable col-2" })
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.Address, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.Gender, new { @class = "col-form-lable col-2" })
+                <div class="col-4">
+                    Male
+                    @Html.RadioButtonFor(x => x.Gender, "Male")
+                    Female
+                    @Html.RadioButtonFor(x => x.Gender, "Female")
+                    @Html.ValidationMessageFor(x => x.Gender, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.Doctor, new { @class = "col-form-lable col-2" })
+                <div class="col-4">
+                    @*@Html.TextBoxFor(x => x.PatientName, new { @class = "form-control" })*@
+                    @Html.DropDownListFor(x => x.DoctorId, new SelectList(ViewBag.Doctors, "DoctorId", "DoctorName"), "select", new { @class = "form-select" })
+                    @Html.ValidationMessageFor(x => x.Doctor, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+
+                <div class="col-4">
+                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-12">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+@section scripts {
+    <script src="~/Scripts/jquery-3.6.3.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function OnSuccess() {
+            $("#frm").trigger("reset")
+        }
+    </script>
+}

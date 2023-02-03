@@ -1,0 +1,21 @@
+﻿CREATE TABLE Doctors
+(
+	DoctorId INT IDENTITY PRIMARY KEY,
+	DoctorName NVARCHAR(50) NOT NULL,
+	BirthDate DATE NOT NULL,
+	Qualification  NVARCHAR(50) NOT NULL,
+	Salary MONEY NOT NULL,
+	IsAvaliable BIT,
+	Picture NVARCHAR(50) NOT NULL
+)
+GO
+CREATE TABLE Patients
+(
+	PatientId INT IDENTITY PRIMARY KEY,
+	PatientName NVARCHAR(50) NOT NULL,
+	Phone INT NOT NULL,
+	BloodGroup NVARCHAR(30) NOT NULL,
+	[Address] NVARCHAR(100) NOT NULL,
+	Gender NVARCHAR(40) NOT NULL,
+	DoctorId INT NOT NULL REFERENCES Doctors(DoctorId)
+)

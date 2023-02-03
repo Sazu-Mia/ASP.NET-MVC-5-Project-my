@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Mid_Month_Exam_Works_01.Models.Patient>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h4>Patients</h4>
+        <div class="d-flex justify-content-end mb-2">
+                @Html.ActionLink("Create New", "Create", new { }, new { @class = "btn btn-primary" })
+            </div>
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Patients Name</th>
+                    <th>Phone</th>
+                    <th>Blood Group</th>
+                    <th>Address</th>
+                    <th>Gender</th>
+                    <th>Doctor</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr id="tr_@p.PatientId">
+                        <td>@p.PatientName</td>
+                        <td>@p.Phone</td>
+                        <td>@p.BloodGroup</td>
+                        <td>@p.Address</td>
+                        <td>@p.Gender</td>
+                        <td>@p.Doctor.DoctorName</td>
+                        <td>
+                            @Html.ActionLink("Create", "Create", new { }, new { @class = "btn btn-outline-primary" }) |
+                            &nbsp;
+                            @Html.ActionLink("Edit", "Edit", "Patients", new { id = p.PatientId }, new { @class = "btn btn-outline-secondary btn-sm" }) |
+                            &nbsp;
+                            @Ajax.ActionLink("Delete", "Delete", "Patients", new { id = p.PatientId }, new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnSuccess" }, new { @class = "btn btn-outline-danger btn-sm del" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section scripts {
+    <script src="~/Scripts/jquery-3.6.3.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function OnSuccess(r) {
+            $("#tr_" + r.id).remove();
+        }
+        function OnBegin(ev) {
+            if (!confirm("Are you sure to delete")) ev.preventDefault();
+        }
+    </script>
+}

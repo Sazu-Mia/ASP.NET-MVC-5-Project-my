@@ -1,0 +1,178 @@
+﻿@model Mid_Month_Exam_Works_01.ViewModel.DoctorInputModel
+@{
+    ViewBag.Title = "MasterDetailInsert";
+}
+
+<h2>Master Detail Insert</h2>
+<div class="row">
+    <div class="col-12">
+        <h3>Create new Doctor</h3>
+        <div id="alert" style="display:none">
+
+        </div>
+        @using (Html.BeginForm("Create", "Doctors", FormMethod.Post, htmlAttributes: new { id = "frm1" }))
+        {
+            <div class="form-group row mb-1">
+                <label class="col-form-label col-2">Doctor Name</label>
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.DoctorName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.DoctorName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label class="col-form-label col-2">Date of birth</label>
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.BirthDate, new { @class = "form-control date" })
+                    @Html.ValidationMessageFor(x => x.BirthDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label class="col-form-label col-2">Qualification</label>
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.Qualification, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Qualification, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label class="col-form-label col-2">Salary</label>
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.Salary, new { @class = "form-control", @type = "number" })
+                    @Html.ValidationMessageFor(x => x.Salary, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label class="col-form-label col-2">IsAvaliable</label>
+                <div class="col-4">
+                    @Html.CheckBoxFor(x => x.IsAvaliable)
+                    @Html.ValidationMessageFor(x => x.IsAvaliable, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label class="col-form-label col-2">Picture</label>
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.Picture, new { @class = "form-control", @type = "file" })
+                    @Html.ValidationMessageFor(x => x.Picture, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        }
+    </div>
+
+</div>
+<div class="row mt-1">
+    <div class="col-12">
+        @Html.Partial("_CreatePartial")
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-12">
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>PatientName</th>
+                    <th>Phone</th>
+                    <th>BloodGroup</th>
+                    <th>Address</th>
+                    <th>Gender</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tbd"></tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-end">
+            <button id="save" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</div>
+@section styles{
+    <link href="~/Content/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+    }
+@section scripts{
+    <script src="~/Scripts/jquery-3.6.3.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script>
+        var patients = [];
+        $("#add").click(() => {
+            let isValid = $("#frm2").valid();
+            if (isValid) {
+                patients.push({
+                    PatientName: $("#PatientName").val(),
+                    Phone: $("#Phone").val(),
+                    BloodGroup: $("#BloodGroup").val(),
+                    Address: $("#Address").val(),
+                    Gender: $("#Gender").val()
+                });
+                $("#frm2").trigger('reset');
+                load();
+            }
+        });
+        function load() {
+            $("#tbd").empty();
+            patients.forEach((q, i) => {
+                $("#tbd").append(`<tr>
+                        <td>${q.PatientName}</td>
+                        <td>${q.Phone}</td>
+                        <td>${q.BloodGroup}</td>
+                        <td>${q.Address}</td>
+                        <td>${q.Gender}</td>
+                        <td><button type='button' data-index="${i}" class='btn btn-danger btn-sm del'>Del</button></td>
+                            </tr>`);
+            });
+        }
+        $(document).on("click", 'button.del', function () {
+            let index = $(this).data('index');
+            patients.splice(index, 1);
+            $(this).parent().parent().remove();
+            $("#frm2").trigger('reset');
+        });
+        $("#save").click(() => {
+            var isValid = $("#frm1").valid();
+            if (isValid) {
+                var formData = new FormData();
+                formData.append("DoctorName", $("#DoctorName").val());
+                formData.append("BirthDate", $("#BirthDate").val());
+                formData.append("Qualification", $("#Qualification").val());
+                formData.append("Salary", $("#Salary").val());
+                formData.append("IsAvaliable", document.getElementById("IsAvaliable").checked);
+                if (document.getElementById("Picture").files.length > 0) {
+                    formData.append("Picture", document.getElementById("Picture").files[0]);
+                    console.log(formData);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/Doctors/CreateMaster",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: r => {
+                        console.log(r)
+                        $.ajax({
+                            type: "POST",
+                            url: "/Doctors/AddPatients/" + r.DoctorId,
+                            contentType: "application/json",
+                            data: JSON.stringify(patients),
+                            dataType: "json",
+                            success: r => {
+                                alert("Data saved");
+                            },
+                            error: err => {
+
+                            }
+                         
+                        });
+                        $("#frm1").trigger('reset');
+                    }
+                });
+            }
+        });
+        $(".date").datepicker({
+            format: 'yyyy-mm-dd'
+        });
+    </script>
+}

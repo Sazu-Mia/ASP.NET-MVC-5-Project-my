@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-12" id="PlaceHolder"></div>
+    <div class="col-12" id="Loading"></div>
+    <div class="col-12">
+        <h4>Doctors List</h4>
+        <div class="d-flex justify-content-end mb-2">
+            @Html.ActionLink("Create New", "Create", new { }, new { @class = "btn btn-primary" })
+        </div>
+        @Html.Action("DoctorList", "Doctors")
+    </div>
+</div>
+@section scripts {
+
+    <script src="~/Scripts/jquery-3.6.3.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function OnBegin(ev) {
+            if (!confirm("Are you sure to delete")) ev.preventDefault();
+        }
+        function OnSuccess(r) {
+            if (r.success) {
+                $("#tr_" + r.id).remove();
+            }
+            else {
+                alert("Cannot delete data with child")
+            }
+        }
+       
+    </script>
+}

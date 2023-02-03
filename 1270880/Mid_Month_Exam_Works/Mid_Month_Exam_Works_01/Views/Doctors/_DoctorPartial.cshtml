@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Mid_Month_Exam_Works_01.Models.Doctor>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table">
+            <thead class="table-light table-group-divider">
+                <tr>
+                    <th>Doctor Name</th>
+                    <th>Birth Date</th>
+                    <th>Qualification</th>
+                    <th>Salary</th>
+                    <th>IsAvaliable?</th>
+                    <th>Picture</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in Model)
+                {
+                    <tr id="tr_@d.DoctorId">
+                        <td>@d.DoctorName</td>
+                        <td>@d.BirthDate.ToString("yyyy-mm-dd")</td>
+                        <td>@d.Qualification</td>
+                        <td>@d.Salary.ToString("0.00")</td>
+                        <td>@(d.IsAvaliable.Value ? "Yes": "No")</td>
+                        <td><img src="~/Uploads/@d.Picture" class="rounded-circle" style="width:80px" /></td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", "Doctors", new { id = d.DoctorId }, new { @class = "btn btn-primary btn-sm" })
+                            &nbsp;
+                            @Ajax.ActionLink("Delete", "Delete", "Doctors", new { id = d.DoctorId }, new AjaxOptions { HttpMethod="POST",
+                            OnBegin="OnBegin", OnSuccess="OnSuccess"} ,new { @class = "btn btn-danger btn-sm" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
