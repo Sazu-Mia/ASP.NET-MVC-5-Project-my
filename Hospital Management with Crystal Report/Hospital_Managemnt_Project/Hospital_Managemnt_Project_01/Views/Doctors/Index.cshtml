@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Hospital_Managemnt_Project_01.Models.Doctor>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h4>Doctors</h4>
+        <div class="d-flex justify-content-end mb-1">
+            @Html.ActionLink("Create", "Create", "Doctors", new { }, new { @class = "btn btn-outline-primary btn-sm" })
+        </div>
+        <table class="table table-striped">
+            <thead class="bg-light">
+                <tr>
+                    <th>Doctor Name</th>
+                    <th>Birth Date</th>
+                    <th>Doctor Fee</th>
+                    <th>IsAvaliable</th>
+                    <th>Picture</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in Model)
+                {
+                    <tr id="tr_@d.DoctorId">
+                        <td>@d.DoctorName</td>
+                        <td>@d.BirthDate.ToString("yyyy-MM-dd")</td>
+                        <td>@d.DoctorFee</td>
+                        <td>@(d.IsAvaliable ? "Yes" : "No" )</td>
+                        <td><img src="~/Uploads/@d.Picture" style="width: 50px" /></td>
+                        <td>
+                            @Html.ActionLink("Create", "Create", "Doctors", new { }, new { @class = "btn btn-outline-primary btn-sm" }) |
+                            @Html.ActionLink("Edit", "Edit", "Doctors", new { id = d.DoctorId }, new { @class = "btn btn-outline-secondary btn-sm" }) |
+                            @Ajax.ActionLink("Delete", "Delete", "Doctors", new { id = d.DoctorId }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure to Delete?", OnSuccess = "onSuccess" }, new { @class = "btn btn-outline-danger btn-sm" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <h4>Patients</h4>
+                            <table class="table table-striped">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Patient Name</th>
+                                        <th>Phone</th>
+                                        <th>Gender</th>
+                                        <th>Address</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var p in d.Patients)
+                                    {
+                                        <tr>
+                                            <td>@p.PatientName</td>
+                                            <td>@p.Phone</td>
+                                            <td>@p.Gender</td>
+                                            <td>@p.Address</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery-3.6.3.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function onSuccess(r) {
+            $("#tr_" + r).remove();
+        }
+    </script>
+}
+
+
+

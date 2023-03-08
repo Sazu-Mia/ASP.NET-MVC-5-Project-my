@@ -1,0 +1,36 @@
+﻿@model Hospital_Managemnt_Project_01.ViewModels.DoctorInputModel
+
+@for (var i = 0; i < Model.Patients.Count; i++)
+{
+    <div class="col-3">
+        <label>Patient Name</label>
+        @Html.TextBoxFor(x => x.Patients[i].PatientName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Patients[i].PatientName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="col-2">
+        <label>Phone</label>
+        @Html.TextBoxFor(x => x.Patients[i].Phone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Patients[i].Phone, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="col-3">
+        <label>Address</label>
+        @Html.TextBoxFor(x => x.Patients[i].Address, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Patients[i].Address, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="col-2">
+        <label>Gender</label>
+        Male
+        @Html.RadioButtonFor(x => x.Patients[i].Gender, "Male")
+        Female
+        @Html.RadioButtonFor(x => x.Patients[i].Gender, "Female")
+        @Html.ValidationMessageFor(x => x.Patients[i].Gender, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="col-2">
+        <button type="button" class="btn btn-secondary btn-sm del" data-index="@i">Remove</button>
+    </div>
+}
+

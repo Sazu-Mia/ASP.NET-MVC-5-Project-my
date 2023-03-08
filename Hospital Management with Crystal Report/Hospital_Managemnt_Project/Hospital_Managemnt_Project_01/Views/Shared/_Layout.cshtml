@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title </title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <style>
+        body {
+            padding-top: 70px;
+        }
+       
+        .main{
+            min-height:  calc(100vh - 300px);
+        }
+    </style>
+    @RenderSection("styles", false)
+</head>
+<body>
+    <nav class="navbar fixed-top navbar-expand-md border-bottom shadow-sm bg-dark" style="background: linear-gradient(-50deg, #483D8B 50%, white 20%); width:100%; height: 70px; font-size: 1rem; font-weight: bold; color: white">
+
+        <div class="container">
+            <img src="~/SampleImage/logo.png" height="40" width="40" />
+            <span class="navbar-brand">Al-Shifa Hospital</span>
+            <ul style="width:400px;margin-left:-40px;">
+                <marquee style="color:#FF5722;font-size:30px;font-weight:bold;margin-top:18px;font-family:Kalpurush">Welcome to Al-Shifa Hospital</marquee>
+            </ul>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarText">
+                <ul class="navbar-nav ms-auto" id="navbarText">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Home")" class="nav-link"><span style="color: white">Home</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Doctors")" class="nav-link"><span style="color: white">Master-Detail</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span style="color: white">Examples</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a href="@Url.Action("Index", "Bills")" class="nav-link">Bill</a></li>
+                            <li><a href="@Url.Action("Index", "BillDetails")" class="nav-link">BillDetails</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span style="color: white">Reports</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a href="@Url.Action("Index", "CrystalReport")" class="nav-link">Report With Image</a></li>
+
+                            <li><a href="@Url.Action("BillsReport", "CrystalReport")" class="nav-link">Patients Bill Report</a></li>
+                            <li><a href="@Url.Action("DoctorsReport", "CrystalReport")" class="nav-link">Report 3</a></li>
+                        </ul>
+                    </li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.Action("Logout", "Account")" class="nav-link"><span style="color: white">Logout</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.Action("Register", "Account")" class="nav-link"><span style="color: white">Register</span></a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a href="@Url.Action("Login", "Account")" class="nav-link"><span style="color: white">Login</span></a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container main">
+        @RenderBody()
+
+
+    </main>
+
+    <nav class="container-fluid text-white navbar sticky-bottom" style="background: #483D8B;">
+        <div style="display:flex; flex-direction:row; justify-content:space-between; padding-top:10px">
+            <div style="width:500px; padding-left:10px">
+                <img style="width:80px; background-color: none; align-items:center" src="~/SampleImage/logo.png" alt="Logo" />
+                <h1>Al-Shifa Hospital</h1>
+            </div>
+            <div style="width:500px">
+                <h1>Al-Shifa Hospital</h1>
+                <p>Al-Shifa Hospital has all the characteristics of a world-class hospital with wide range of services and specialists, equipments and technology, ambience and service quality.</p>
+            </div>
+            <div style="width:500px">
+                <h1>Find us</h1>
+                <p>Dhaka, Bangladesh</p>
+            </div>
+        </div>
+        <div class="container text-center">
+            <p>&copy; Design & Develope by Sazu</p>
+        </div>
+    </nav>
+    @RenderSection("scripts", false)
+</body>
+</html>

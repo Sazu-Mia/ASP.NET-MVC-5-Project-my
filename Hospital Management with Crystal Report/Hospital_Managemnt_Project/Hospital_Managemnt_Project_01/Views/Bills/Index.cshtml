@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Hospital_Managemnt_Project_01.Models.Bill>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h4>Bills</h4>
+        <div class="d-flex justify-content-end mb-1">
+            @Html.ActionLink("Create", "Create", "Bills", new { }, new { @class = "btn btn-outline-primary btn-sm" })
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Bill Date</th>
+                    <th>Sead Rent</th>
+                    <th>Other Charge</th>
+                    <th>Patient</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr id="tr_@b.BillId">
+                        <td>@b.BillDate.ToString("yyyy-MM-dd")</td>
+                        <td>@b.SeatRent</td>
+                        <td>@b.OtherCharge</td>
+                        <td>@b.Patient.PatientName</td>
+                        <td>
+                            @Html.ActionLink("Create", "Create", "Bills", new { }, new { @class = "btn btn-outline-primary btn-sm" }) |
+                            @Html.ActionLink("Edit", "Edit", "Bills", new { id = b.BillId }, new { @class = "btn btn-outline-secondary btn-sm" }) |
+                            @Ajax.ActionLink("Delete", "Delete", "Bills", new { id = b.BillId }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure to Delete?", OnSuccess = "onSuccess" }, new { @class = "btn btn-outline-danger btn-sm" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery-3.6.3.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function onSuccess(r) {
+            $("#tr_" + r).remove();
+        }
+    </script>
+}

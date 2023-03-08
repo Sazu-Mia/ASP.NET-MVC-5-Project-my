@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Hospital_Managemnt_Project_01.ViewModels.DoctorReportView>
+@{
+    ViewBag.Title = "DoctorsReport";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h3>Doctors</h3>
+
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+
+                    <th>Doctor Name</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var g in Model.GroupBy(x => x.DoctorName).ToList())
+                {
+                    <tr>
+                        <td>
+                            @g.Key
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="6">
+                            <h4>Patients</h4>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>PatientName</th>
+                                        <th>Phone</th>
+                                        <th>Gender</th>
+                                        <th>Address</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var q in g)
+                                    {
+                                        <tr>
+                                            <td>@q.PatientName</td>
+                                            <td>@q.Phone</td>
+                                            <td>@q.Gender</td>
+                                            <td>@q.Address</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-12 text-center">
+        @Html.ActionLink("PDF", "PatientPDF", "CrystalReport", new { }, new { @class = "btn btn-primary btn-sm" })
+        @Html.ActionLink("Excel", "PatientExcel", "CrystalReport", new { }, new { @class = "btn btn-secondary btn-sm" })
+    </div>
+</div>
+@section scripts {
+
+}
+
+

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HospitalDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="BillDetail">
+    <Key>
+      <PropertyRef Name="BillDetailId" />
+    </Key>
+    <Property Name="BillDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Advance" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="HealthCard" Type="Boolean" Nullable="false" />
+    <Property Name="BillId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Bill" Relationship="Self.FK_dbo_BillDetails_dbo_Bills_BillId" FromRole="BillDetails" ToRole="Bills" />
+  </EntityType>
+  <EntityType Name="Bill">
+    <Key>
+      <PropertyRef Name="BillId" />
+    </Key>
+    <Property Name="BillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BillDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="SeatRent" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="OtherCharge" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PatientId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="BillDetails" Relationship="Self.FK_dbo_BillDetails_dbo_Bills_BillId" FromRole="Bills" ToRole="BillDetails" />
+    <NavigationProperty Name="Patient" Relationship="Self.FK_dbo_Bills_dbo_Patients_PatientId" FromRole="Bills" ToRole="Patients" />
+  </EntityType>
+  <EntityType Name="Doctor">
+    <Key>
+      <PropertyRef Name="DoctorId" />
+    </Key>
+    <Property Name="DoctorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DoctorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DoctorFee" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="IsAvaliable" Type="Boolean" Nullable="false" />
+    <Property Name="Picture" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Patients" Relationship="Self.FK_dbo_Patients_dbo_Doctors_DoctorId" FromRole="Doctors" ToRole="Patients" />
+  </EntityType>
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="PatientId" />
+    </Key>
+    <Property Name="PatientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PatientName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone" Type="Int32" Nullable="false" />
+    <Property Name="Gender" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DoctorId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Bills" Relationship="Self.FK_dbo_Bills_dbo_Patients_PatientId" FromRole="Patients" ToRole="Bills" />
+    <NavigationProperty Name="Doctor" Relationship="Self.FK_dbo_Patients_dbo_Doctors_DoctorId" FromRole="Patients" ToRole="Doctors" />
+  </EntityType>
+  <Association Name="FK_dbo_BillDetails_dbo_Bills_BillId">
+    <End Role="Bills" Type="Self.Bill" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="BillDetails" Type="Self.BillDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Bills">
+        <PropertyRef Name="BillId" />
+      </Principal>
+      <Dependent Role="BillDetails">
+        <PropertyRef Name="BillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Bills_dbo_Patients_PatientId">
+    <End Role="Patients" Type="Self.Patient" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Bills" Type="Self.Bill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patients">
+        <PropertyRef Name="PatientId" />
+      </Principal>
+      <Dependent Role="Bills">
+        <PropertyRef Name="PatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Patients_dbo_Doctors_DoctorId">
+    <End Role="Doctors" Type="Self.Doctor" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Patients" Type="Self.Patient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctors">
+        <PropertyRef Name="DoctorId" />
+      </Principal>
+      <Dependent Role="Patients">
+        <PropertyRef Name="DoctorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HospitalDbEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="BillDetails" EntityType="Self.BillDetail" />
+    <EntitySet Name="Bills" EntityType="Self.Bill" />
+    <EntitySet Name="Doctors" EntityType="Self.Doctor" />
+    <EntitySet Name="Patients" EntityType="Self.Patient" />
+    <AssociationSet Name="FK_dbo_BillDetails_dbo_Bills_BillId" Association="Self.FK_dbo_BillDetails_dbo_Bills_BillId">
+      <End Role="Bills" EntitySet="Bills" />
+      <End Role="BillDetails" EntitySet="BillDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Bills_dbo_Patients_PatientId" Association="Self.FK_dbo_Bills_dbo_Patients_PatientId">
+      <End Role="Patients" EntitySet="Patients" />
+      <End Role="Bills" EntitySet="Bills" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Patients_dbo_Doctors_DoctorId" Association="Self.FK_dbo_Patients_dbo_Doctors_DoctorId">
+      <End Role="Doctors" EntitySet="Doctors" />
+      <End Role="Patients" EntitySet="Patients" />
+    </AssociationSet>
+    <EntitySet Name="Doctor1" EntityType="HospitalDbModel.Doctor1" />
+  </EntityContainer>
+  <EntityType Name="Doctor1">
+    <Key>
+      <PropertyRef Name="DoctorId" />
+    </Key>
+    <Property Name="DoctorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DoctorName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DoctorFee" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="IsAvaliable" Type="Boolean" Nullable="false" />
+    <Property Name="Picture" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="Byte" Nullable="false" />
+  </EntityType>
+</Schema>

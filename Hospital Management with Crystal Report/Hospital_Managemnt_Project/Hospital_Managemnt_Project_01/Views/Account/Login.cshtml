@@ -1,0 +1,39 @@
+﻿@model Hospital_Managemnt_Project_01.ViewModels.identity.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h4 style=""text-align: center; border-radius: 5px; color: white; width: 100%; height: 50px; background: #483D8B">Login Form</h4>
+        @using (Html.BeginForm())
+        {
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.UserName, new { @class = "col-form-lable col-2" })
+                <div class="col-4">
+                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.Password, new { @class = "col-form-lable col-2" })
+                <div class="col-4">
+                    @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row mb-1">
+
+                <div class="col-4 offset-2">
+                    <button type="submit" class="btn btn-success btn-sm">Login</button>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-12">
+        @Html.ActionLink("Registration here...", "Register", "Account")
+    </div>
+</div>
+

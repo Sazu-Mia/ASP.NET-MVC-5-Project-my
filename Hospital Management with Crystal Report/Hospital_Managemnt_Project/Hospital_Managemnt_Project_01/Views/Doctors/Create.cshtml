@@ -1,0 +1,141 @@
+﻿@model Hospital_Managemnt_Project_01.ViewModels.DoctorInputModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h4>Create New Doctor</h4>
+        <div id="placeholder"></div>
+        @using (Ajax.BeginForm("Create", "Doctors", new { }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "placeholder", OnSuccess = "onSuccess" }, new { id = "frm" }))
+        {
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.DoctorName, new { @class = "col-form-lable col-2" })
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x => x.DoctorName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.DoctorName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.BirthDate, new { @class = "col-form-lable col-2" })
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x => x.BirthDate, new { @class = "form-control date" })
+                @Html.ValidationMessageFor(x => x.BirthDate, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.DoctorFee, new { @class = "col-form-lable col-2" })
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x => x.DoctorFee, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.DoctorFee, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.IsAvaliable, new { @class = "col-form-lable col-2" })
+            </div>
+            <div class="col-4">
+                @Html.CheckBoxFor(x => x.IsAvaliable)
+
+            </div>
+
+            <div class="form-group row mb-1">
+                @Html.LabelFor(x => x.Picture, new { @class = "col-form-lable col-2" })
+            </div>
+            <div class="col-4">
+                <input type="file" id="pic" class="form-control" />
+                @Html.HiddenFor(x => x.Picture, new { value = "" })
+                @Html.ValidationMessageFor(x => x.Picture, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="w-100">
+
+            </div>
+            <div class="d-flex justify-content-end mb-1">
+                <button type="button" id="add" class="btn btn-primary btn-sm">Add</button>
+            </div>
+
+            <div class="row mb-1" id="patients">
+                @Html.Action("AddPatientToForm")
+            </div>
+
+            <div class="w-100">
+
+            </div>
+            <div class="d-flex justify-content-end mb-1">
+                <button type="submit" class="btn btn-success btn-sm">Save</button>
+            </div>
+        }
+    </div>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Content/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery-3.6.3.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $.validator.setDefaults({
+            ignore: ""
+        });
+        $(".date").datepicker({
+            format: "yyyy-mm-dd"
+        });
+        $("#add").click(() => {
+            $.ajax({
+                type: "POST",
+                url: "/Doctors/AddPatientToForm",
+                cache: false,
+                data: $("#frm").serialize(),
+                success: r => {
+                    $("#patients").html(r);
+                }
+            });
+        })
+        $("#pic").change(() => {
+            if (document.getElementById("pic").files.length) {
+                $("#Picture").val(document.getElementById("pic").files[0].name);
+            }
+        });
+        $(document).on("click", "button.del", function () {
+            var i = $(this).data("index");
+            $.ajax({
+                type: "POST",
+                url: "/Doctors/AddPatientToForm?index="+i,
+                cache: false,
+                data: $("#frm").serialize(),
+                success: r => {
+                    $("#patients").html(r);
+                }
+            });
+        });
+        function onSuccess(r) {
+            var formData = new FormData();
+            if (document.getElementById("pic").files.length > 0) {
+                formData.append("Picture", document.getElementById("pic").files[0]);
+                $.ajax({
+                    type: "POST",
+                    url: "/Doctors/UploadImage/"+r.id,
+
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: r => {
+                        alert("Data Saved");
+                    }
+                });
+            }
+        }
+    </script>
+}
+
